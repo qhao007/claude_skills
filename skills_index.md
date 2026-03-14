@@ -1,6 +1,6 @@
 # Skills Index
 
-Generated on: 2026-03-14 20:39:02
+Generated on: 2026-03-14 20:40:22
 
 ## Skills List
 
@@ -34,7 +34,7 @@ Generated on: 2026-03-14 20:39:02
 
 ### project-memory-saver
 
-- **Description**: No description
+- **Description**: name: project-memory-saver
 - **Version**: Unknown
 - **Last Updated**: 2026-03-14 20:15
 - **Files**: 1
@@ -69,7 +69,7 @@ Generated on: 2026-03-14 20:39:02
 
 ### verilog-dev
 
-- **Description**: No description
+- **Description**: name: verilog-dev
 - **Version**: Unknown
 - **Last Updated**: 2026-03-14 20:15
 - **Files**: 1
