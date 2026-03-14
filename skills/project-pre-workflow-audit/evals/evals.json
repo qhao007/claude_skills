@@ -1,0 +1,23 @@
+{
+  "skill_name": "project-pre-workflow-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我要开始执行 pcie-debug-flow 工作流，请帮我创建执行日志",
+      "expected_output": "在 .dvv 目录下创建 pcie_debug_flow_log.md 文件，包含完整的执行日志模板",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "现在开始运行 verilog_dev 工作流，请先准备日志文件",
+      "expected_output": "在 .dvv 目录下创建 verilog_dev_log.md 文件，包含模板内容",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我要执行 chip_verification 流程，请创建对应的执行日志",
+      "expected_output": "在 .dvv 目录下创建 chip_verification_log.md 文件",
+      "files": []
+    }
+  ]
+}

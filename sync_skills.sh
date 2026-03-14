@@ -49,14 +49,20 @@ sync_skill() {
 
             local updated=false
             # Find files with proper filtering
+            # Normalize src_path to ensure no trailing slash
+            src_path="${src_path%/}"
+
             while IFS= read -r -d '' file; do
                 # Skip problematic paths
                 [[ "$file" == *"/BaiduNetdiskDownload/"* ]] && continue
                 [[ "$file" == *"/back-up/"* ]] && continue
                 [[ "$file" == *"/RECYCLE/"* ]] && continue
+                [[ "$file" == *"$src_path"* ]] || continue
 
-                local rel_path="${file#$src_path/}"
+                # Get relative path - remove src_path prefix
+                local rel_path="${file#$src_path}"
                 rel_path="${rel_path#/}"
+
                 local target_file="$target_subdir/$rel_path"
                 local target_file_dir="$(dirname "$target_file")"
 

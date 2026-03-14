@@ -1,0 +1,46 @@
+{
+  "skill_name": "excel-to-tracker-csv",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "将 D:/claude_workspace/tracker_project_summary/EX1_ValChar_Tracker.xlsx 转换为Tracker CSV格式",
+      "expected_output": "生成 EX1_ValChar_Tracker_CP.csv，包含转换后的Cover Point数据",
+      "files": [
+        "D:/claude_workspace/tracker_project_summary/EX1_ValChar_Tracker.xlsx"
+      ],
+      "assertions": [
+        "CSV文件存在且可读",
+        "CSV包含正确的表头: feature,sub_feature,cover_point,cover_point_details,priority,comments",
+        "无'Unknown'占位符（应使用上一行值填充）",
+        "无Unicode乱码字符（±已转换为+/-）",
+        "无中文标点（，。）（）已转换为英文",
+        "记录数与Excel有效记录数一致（约215条）",
+        "Dual Boot错误类型已拆分为多行"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "将Excel文件中的Category_Name和Block_Name空值进行向下填充处理",
+      "expected_output": "空值应使用上一行的值填充，而非'Unknown'",
+      "files": [],
+      "assertions": [
+        "feature列无空值",
+        "sub_feature列无'Unknown'值",
+        "当Category_Name变化时，新的sub_feature值正确延续"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "清理Excel中的错误值（#DIV/0!, #REF!等）并替换Unicode字符",
+      "expected_output": "干净的CSV文件，无Excel错误值和Unicode乱码",
+      "files": [],
+      "assertions": [
+        "无#DIV/0!错误值",
+        "无#REF!错误值",
+        "±已转换为+/-",
+        "→已转换为->",
+        "无制表符或NBSP（已转换为空格）"
+      ]
+    }
+  ]
+}

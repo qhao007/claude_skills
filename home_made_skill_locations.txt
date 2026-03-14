@@ -9,5 +9,8 @@
 /c/Users/haoq/.claude/skills/project-memory-saver
 /c/Users/haoq/.claude/skills/verilog-dev
 
+# This project (workflow skill)
+/d/claude_workspace/home_made_skill_management/sync-home-made-skill
+
 # Server Skills (Tracker) - requires SSH access
 # /projects/management/tracker/custom_skills/tracker_

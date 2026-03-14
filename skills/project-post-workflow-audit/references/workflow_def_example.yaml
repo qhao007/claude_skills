@@ -1,0 +1,65 @@
+# 工作流定义示例
+#
+# 此文件展示如何定义一个工作流供 project-post-workflow-audit 技能使用
+# 复制此文件到项目目录并根据实际工作流修改
+
+name: "子代理驱动开发工作流"
+version: "1.0"
+
+description: "用于芯片验证项目的子代理驱动开发工作流"
+
+steps:
+  - id: step0
+    name: 意图路由
+    required: true
+    sub_steps:
+      - 语义意图分类
+      - 置信度评估
+      - 路由到目标
+
+  - id: step1
+    name: 计划阶段
+    required: true
+    sub_steps:
+      - 读取任务文档
+      - 注入相关经验
+      - 生成实施计划
+      - 用户审阅通过
+
+  - id: step2
+    name: 构建阶段
+    required: true
+    sub_steps:
+      - 分解为独立组件
+      - 并行构建
+      - 聚合结果
+
+  - id: step3
+    name: 验证阶段
+    required: true
+    sub_steps:
+      - Lint检查
+      - 仿真验证
+      - 问题修复循环
+
+  - id: step4
+    name: 评估沉淀
+    required: true
+    sub_steps:
+      - 收集执行指标
+      - 填写评估报告
+      - 更新经验文档
+      - 更新 lessons
+
+gate_checks:
+  - step1: "用户必须审阅通过才能进入下一阶段"
+  - step3: "必须同时通过 lint 和仿真"
+  - step4: "必须更新经验文档和 lessons"
+
+optional_steps:
+  - id: debug_loop
+    name: 调试修复循环
+    sub_steps:
+      - 诊断问题
+      - 修复代码
+      - 重新验证
