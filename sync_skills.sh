@@ -21,6 +21,35 @@ normalize_path() {
     fi
 }
 
+# Check if path is remote (SSH)
+is_remote_path() {
+    [[ "$1" == /projects/* ]]
+}
+
+# Sync from remote server via SSH
+sync_remote_skill() {
+    local remote_path="$1"
+    local skill_name=$(basename "$remote_path")
+    skill_name="${skill_name%/}"
+
+    # Skip single-letter and problematic directories
+    [[ "$skill_name" =~ ^[a-z]$ ]] && return
+    [[ "${skill_name,,}" == *"back"* ]] && return
+    [[ "${skill_name,,}" == *"recycle"* ]] && return
+
+    local target_subdir="$TARGET_DIR/$skill_name"
+
+    # Check if SKILL.md or skill.md exists on remote
+    if ssh -o StrictHostKeyChecking=no claude_ai@124.221.165.134 "[ -f '$remote_path/SKILL.md' ] || [ -f '$remote_path/skill.md' ]"; then
+        mkdir -p "$target_subdir"
+        # Copy all files from remote skill directory
+        scp -o StrictHostKeyChecking=no -r "claude_ai@124.221.165.134:$remote_path/"* "$target_subdir/" 2>/dev/null
+        echo "[UPDATED] $skill_name (from server)"
+    else
+        echo "[SKIP] $skill_name (not a skill directory)"
+    fi
+}
+
 # Sync a single skill
 sync_skill() {
     local src_path="$1"
@@ -31,6 +60,12 @@ sync_skill() {
     [[ "$skill_name" =~ ^[a-z]$ ]] && return
     [[ "${skill_name,,}" == *"back"* ]] && return
     [[ "${skill_name,,}" == *"recycle"* ]] && return
+
+    # Handle remote paths
+    if is_remote_path "$src_path"; then
+        sync_remote_skill "$src_path"
+        return
+    fi
 
     if [[ -f "$src_path" ]]; then
         # Single file skill
@@ -107,6 +142,12 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
     [[ -z "$line" ]] && continue
     [[ "$line" =~ ^# ]] && continue
+
+    # Check if remote path
+    if is_remote_path "$line"; then
+        sync_skill "$line"
+        continue
+    fi
 
     src_path=$(normalize_path "$line")
     [[ -z "$src_path" ]] && continue

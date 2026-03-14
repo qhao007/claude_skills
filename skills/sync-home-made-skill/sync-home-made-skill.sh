@@ -6,8 +6,11 @@
 # 4. Push
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-# Parent directory (project root)
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+# Navigate up to find project root (where sync_skills.sh exists)
+PROJECT_DIR="$SCRIPT_DIR"
+while [[ ! -f "$PROJECT_DIR/sync_skills.sh" && "$PROJECT_DIR" != "/" ]]; do
+    PROJECT_DIR="$(dirname "$PROJECT_DIR")"
+done
 SKILLS_DIR="$PROJECT_DIR/skills"
 INDEX_FILE="$PROJECT_DIR/skills_index.md"
 

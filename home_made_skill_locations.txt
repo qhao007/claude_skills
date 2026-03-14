@@ -13,4 +13,6 @@
 /d/claude_workspace/home_made_skill_management/sync-home-made-skill
 
 # Server Skills (Tracker) - requires SSH access
-# /projects/management/tracker/custom_skills/tracker_
+/projects/management/tracker/custom_skills/skill-creator
+/projects/management/tracker/custom_skills/tracker-coverage-enhancement-workflow
+/projects/management/tracker/custom_skills/tracker_code_development_workflow

@@ -1,6 +1,6 @@
 # Skills Index
 
-Generated on: 2026-03-14 20:45:21
+Generated on: 2026-03-14 20:58:41
 
 ## Skills List
 
@@ -67,12 +67,33 @@ Generated on: 2026-03-14 20:45:21
 - **Last Updated**: 2026-03-14 20:45
 - **Files**: 1
 
+### skill-creator
+
+- **Description**: description: Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to
+- **Version**: Unknown
+- **Last Updated**: 2026-03-14 20:58
+- **Files**: 22
+
 ### sync-home-made-skill
 
 - **Description**: # Description
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-14 20:58
 - **Files**: 2
+
+### tracker-coverage-enhancement-workflow
+
+- **Description**: description: This skill should be used when the user wants to enhance test coverage based on test_coverage_enhancement_plan, including reviewing the plan to identify missing API tests, UI tests, and m
+- **Version**: Unknown
+- **Last Updated**: 2026-03-14 20:56
+- **Files**: 6
+
+### tracker_code_development_workflow
+
+- **Description**: description: This skill should be used when the user wants to develop new features for Tracker (芯片验证管理系统), including Flask backend API development, frontend UI implementation, pytest A
+- **Version**: Unknown
+- **Last Updated**: 2026-03-14 20:56
+- **Files**: 12
 
 ### verilog-dev
 
