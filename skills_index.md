@@ -1,6 +1,6 @@
 # Skills Index
 
-Generated on: 2026-03-14 20:40:22
+Generated on: 2026-03-14 20:41:49
 
 ## Skills List
 
@@ -34,7 +34,7 @@ Generated on: 2026-03-14 20:40:22
 
 ### project-memory-saver
 
-- **Description**: name: project-memory-saver
+- **Description**: description: Save important session information to project-level memory files AND upper-level lessons. Use when user explicitly requests to save information to memory, remembers something, or wants to
 - **Version**: Unknown
 - **Last Updated**: 2026-03-14 20:15
 - **Files**: 1
@@ -55,7 +55,7 @@ Generated on: 2026-03-14 20:40:22
 
 ### questasim-usage
 
-- **Description**: No description
+- **Description**: QuestaSim 仿真工具的使用指南和最佳实践。
 - **Version**: Unknown
 - **Last Updated**: 2026-03-14 20:15
 - **Files**: 1
@@ -69,7 +69,7 @@ Generated on: 2026-03-14 20:40:22
 
 ### verilog-dev
 
-- **Description**: name: verilog-dev
+- **Description**: description: |
 - **Version**: Unknown
 - **Last Updated**: 2026-03-14 20:15
 - **Files**: 1
