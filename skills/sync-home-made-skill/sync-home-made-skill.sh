@@ -151,7 +151,9 @@ if [[ "$SKIP_PUSH" == "true" ]]; then
     echo "[4/4] Skipping push (no remote configured)"
 else
     echo "[4/4] Pushing to remote..."
-    git push -u origin main 2>/dev/null || git push -u origin master 2>/dev/null
+    # Get current branch name
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    git push -u origin "$current_branch"
 fi
 
 echo ""

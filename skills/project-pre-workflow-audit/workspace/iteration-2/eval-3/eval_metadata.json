@@ -1,0 +1,28 @@
+{
+  "eval_id": 3,
+  "eval_name": "archive-legacy-files",
+  "prompt": "我要执行 my_debug_flow 工作流，.dvv 目录已存在且有旧文件，请准备执行环境",
+  "expected_output": "归档旧文件到 .dvv/archived/my_debug_flow/{timestamp}/，创建新的目录结构和日志文件",
+  "assertions": [
+    {
+      "name": "legacy_log_archived",
+      "description": "检查旧的日志文件是否被归档",
+      "check": "存在 .dvv/archived/my_debug_flow/{timestamp}/my_debug_flow_progress_log.md"
+    },
+    {
+      "name": "legacy_inputs_archived",
+      "description": "检查 inputs 目录下的旧文件是否被归档",
+      "check": "存在 .dvv/archived/my_debug_flow/{timestamp}/inputs/ 目录下的旧文件"
+    },
+    {
+      "name": "legacy_plans_archived",
+      "description": "检查 plans 目录下的旧文件是否被归档",
+      "check": "存在 .dvv/archived/my_debug_flow/{timestamp}/plans/ 目录下的旧文件"
+    },
+    {
+      "name": "new_log_created",
+      "description": "检查是否创建了新的日志文件",
+      "check": "存在 .dvv/my_debug_flow_progress_log.md 文件"
+    }
+  ]
+}

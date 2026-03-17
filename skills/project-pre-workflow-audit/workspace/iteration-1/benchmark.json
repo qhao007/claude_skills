@@ -1,0 +1,39 @@
+{
+  "iteration": 1,
+  "skill_name": "project-pre-workflow-audit",
+  "timestamp": "2026-03-16T10:45:00Z",
+  "summary": {
+    "with_skill": {
+      "pass_rate": 0.78,
+      "pass_count": 7,
+      "total_count": 9,
+      "avg_duration_seconds": 153.7,
+      "evals": [
+        {"eval_id": 1, "passed": false, "duration_seconds": 149.8, "notes": ".dvv 目录结构未创建"},
+        {"eval_id": 2, "passed": true, "duration_seconds": 117.2, "notes": "正确完成"},
+        {"eval_id": 3, "passed": true, "duration_seconds": 194.1, "notes": "归档路径符合标准"}
+      ]
+    },
+    "without_skill": {
+      "pass_rate": 0.67,
+      "pass_count": 6,
+      "total_count": 9,
+      "avg_duration_seconds": 139.5,
+      "evals": [
+        {"eval_id": 1, "passed": true, "duration_seconds": 140.3, "notes": "正确完成"},
+        {"eval_id": 2, "passed": true, "duration_seconds": 163.0, "notes": "正确完成"},
+        {"eval_id": 3, "passed": false, "duration_seconds": 115.3, "notes": "归档结构不符合标准"}
+      ]
+    },
+    "delta": {
+      "pass_rate": 0.11,
+      "duration_seconds": 14.2
+    }
+  },
+  "analyst_observations": [
+    "Eval-1 with_skill 失败：子代理未在 .dvv/ 目录下创建文件，而是放在 outputs/",
+    "Eval-3 展示了技能的核心价值：with_skill 使用标准归档路径 archived/{workflow}/{timestamp}/，baseline 使用扁平的 archive/ 结构",
+    "技能在归档功能上表现优秀，但在基础目录创建上存在不一致",
+    "需要改进技能说明，确保子代理始终在当前工作目录下创建 .dvv 结构"
+  ]
+}

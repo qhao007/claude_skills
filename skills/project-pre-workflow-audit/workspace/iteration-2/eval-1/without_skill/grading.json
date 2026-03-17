@@ -1,0 +1,25 @@
+{
+  "eval_id": 1,
+  "eval_name": "basic-workflow-setup",
+  "run_type": "without_skill",
+  "timestamp": "2026-03-16T10:55:00Z",
+  "expectations": [
+    {
+      "text": "directory_structure_created",
+      "passed": true,
+      "evidence": "存在 .dvv/inputs, .dvv/plans, .dvv/others, .dvv/reports, .dvv/archived 目录"
+    },
+    {
+      "text": "log_file_created",
+      "passed": true,
+      "evidence": "存在 .dvv/pcie_debug_flow_progress_log.md 文件"
+    },
+    {
+      "text": "log_file_content",
+      "passed": true,
+      "evidence": "日志文件包含完整的模板内容"
+    }
+  ],
+  "overall_passed": true,
+  "notes": "Baseline 也正确完成了任务"
+}

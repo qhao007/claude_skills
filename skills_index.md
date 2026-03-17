@@ -1,111 +1,117 @@
 # Skills Index
 
-Generated on: 2026-03-14 20:58:41
+Generated on: 2026-03-17
 
 ## Skills List
 
 ### analyze-warnings
 
-- **Description**: description: Analyze QuestaSim compile/simulation logs for warnings and errors
+- **Description**: Analyze QuestaSim compile/simulation logs for warnings and errors
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 2
 
 ### code_development_workflow
 
-- **Description**: description: 代码开发工作流，通过4个子代理完成：开发(Subagent A) → 审查(Subagent B，决策1-3轮优化) → 测试(Subagent C) → 确认修复(Subagent D)。包含推理深度
+- **Description**: 代码开发工作流，通过4个子代理完成：开发(Subagent A) → 审查(Subagent B，决策1-3轮优化) → 测试(Subagent C) → 确认修复(Subagent D)
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
+- **Files**: 1
+
+### dvv-issue-fix-flow
+
+- **Description**: 代码问题调试修复工作流技能。当用户需要调试代码问题、做根因分析、确认debug手段和方法、执行修复到验证修复的闭环时使用此技能
+- **Version**: Unknown
+- **Last Updated**: 2026-03-17
 - **Files**: 1
 
 ### excel-to-tracker-csv
 
-- **Description**: description: 将Excel验证跟踪表转换为Tracker系统可导入的CSV格式。适用于用户说转换Excel到Tracker、生成tracker csv、把数据导入tracker等场景。自动处理数据清�
+- **Description**: 将Excel验证跟踪表转换为Tracker系统可导入的CSV格式。自动处理数据清洗、字段映射、编码修复等
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 3
 
 ### pcie-debug-flow
 
-- **Description**: description: Self-Crosslink PCIE 项目专用调试流程约束。当用户说 /pcie-debug-flow 或明确要求使用调试工作流时触发此 skill。此 skill 强制执行调试必须遵守的开�
+- **Description**: Self-Crosslink PCIE 项目专用调试流程约束。强制执行调试必须遵守的开发流程
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
+- **Files**: 1
+
+### project-lesson-loader
+
+- **Description**: 加载和检索之前保存的lessons和项目记忆，支持渐进式加载
+- **Version**: Unknown
+- **Last Updated**: 2026-03-17
 - **Files**: 1
 
 ### project-memory-saver
 
-- **Description**: description: Save important session information to project-level memory files AND upper-level lessons. Use when user explicitly requests to save information to memory, remembers something, or wants to
+- **Description**: 保存重要会话信息到项目级memory文件和上层lessons
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 1
 
 ### project-post-workflow-audit
 
-- **Description**: description: |
-- **Version**: "1.0"
-- **Last Updated**: 2026-03-14 20:45
+- **Description**: 工作流执行审计技能。在工作流或子任务收尾阶段使用
+- **Version**: 1.0
+- **Last Updated**: 2026-03-17
 - **Files**: 2
 
 ### project-pre-workflow-audit
 
-- **Description**: description: |
+- **Description**: 工作流执行前的准备工作 - 创建工作流目录结构和执行日志
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 2
 
 ### questasim-usage
 
-- **Description**: QuestaSim 仿真工具的使用指南和最佳实践。
+- **Description**: QuestaSim 仿真工具的使用指南和最佳实践
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 1
 
 ### run-simulation
 
-- **Description**: description: Run QuestaSim simulation using project scripts
+- **Description**: Run QuestaSim simulation using project scripts
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 1
 
 ### skill-creator
 
-- **Description**: description: Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to
+- **Description**: 创建新skills、修改改进现有skills、测量skill性能
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:58
+- **Last Updated**: 2026-03-17
 - **Files**: 22
 
 ### sync-home-made-skill
 
-- **Description**: # Description
+- **Description**: 同步并管理本地自建skill的工作流技能
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:58
+- **Last Updated**: 2026-03-17
 - **Files**: 2
 
 ### tracker-coverage-enhancement-workflow
 
-- **Description**: description: This skill should be used when the user wants to enhance test coverage based on test_coverage_enhancement_plan, including reviewing the plan to identify missing API tests, UI tests, and m
+- **Description**: Tracker 测试覆盖增强工作流，5阶段子代理完成测试覆盖提升
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:56
+- **Last Updated**: 2026-03-17
 - **Files**: 6
 
 ### tracker_code_development_workflow
 
-- **Description**: description: This skill should be used when the user wants to develop new features for Tracker (芯片验证管理系统), including Flask backend API development, frontend UI implementation, pytest A
+- **Description**: Tracker (芯片验证管理系统) 专用代码开发工作流，7阶段子代理
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:56
+- **Last Updated**: 2026-03-17
 - **Files**: 12
-
-### verilog-dev
-
-- **Description**: description: |
-- **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
-- **Files**: 1
 
 ### word-to-tracker-tc
 
-- **Description**: description: 从Word测试计划文档中提取Test Cases并转换为Tracker系统可导入的CSV格式。适用于用户说提取Test Case、从测试计划导入TC、转换测试用例到tracker等�
+- **Description**: 从Word测试计划文档中提取Test Cases并转换为Tracker系统可导入的CSV格式
 - **Version**: Unknown
-- **Last Updated**: 2026-03-14 20:45
+- **Last Updated**: 2026-03-17
 - **Files**: 1
-

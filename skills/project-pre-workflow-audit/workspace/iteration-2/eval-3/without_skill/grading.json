@@ -1,0 +1,30 @@
+{
+  "eval_id": 3,
+  "eval_name": "archive-legacy-files",
+  "run_type": "without_skill",
+  "timestamp": "2026-03-16T10:55:00Z",
+  "expectations": [
+    {
+      "text": "legacy_log_archived",
+      "passed": false,
+      "evidence": "旧日志文件归档到 outputs/.dvv_archive_20260316_105336/（非标准路径，缺少 workflow 分组）"
+    },
+    {
+      "text": "legacy_inputs_archived",
+      "passed": false,
+      "evidence": "inputs 文件归档到非标准路径，缺少目录结构保留"
+    },
+    {
+      "text": "legacy_plans_archived",
+      "passed": false,
+      "evidence": "plans 文件归档到非标准路径，缺少目录结构保留"
+    },
+    {
+      "text": "new_log_created",
+      "passed": true,
+      "evidence": "存在新的 .dvv/my_debug_flow_progress_log.md 文件"
+    }
+  ],
+  "overall_passed": false,
+  "notes": "Baseline 归档结构不符合标准：使用 outputs/.dvv_archive_{timestamp}/ 而非 .dvv/archived/{workflow}/{timestamp}/"
+}

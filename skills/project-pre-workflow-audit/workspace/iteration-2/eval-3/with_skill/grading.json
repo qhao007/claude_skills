@@ -1,0 +1,30 @@
+{
+  "eval_id": 3,
+  "eval_name": "archive-legacy-files",
+  "run_type": "with_skill",
+  "timestamp": "2026-03-16T10:55:00Z",
+  "expectations": [
+    {
+      "text": "legacy_log_archived",
+      "passed": true,
+      "evidence": "旧日志文件已归档到 .dvv/archived/my_debug_flow/20260316_105415/my_debug_flow_progress_log.md"
+    },
+    {
+      "text": "legacy_inputs_archived",
+      "passed": true,
+      "evidence": "inputs 目录下的文件已归档到 .dvv/archived/my_debug_flow/20260316_105415/inputs/input1.md"
+    },
+    {
+      "text": "legacy_plans_archived",
+      "passed": true,
+      "evidence": "plans 目录下的文件已归档到 .dvv/archived/my_debug_flow/20260316_105415/plans/plan1.md"
+    },
+    {
+      "text": "new_log_created",
+      "passed": true,
+      "evidence": "存在新的 .dvv/my_debug_flow_progress_log.md 文件"
+    }
+  ],
+  "overall_passed": true,
+  "notes": "技能正确执行了归档功能，归档路径完全符合标准"
+}

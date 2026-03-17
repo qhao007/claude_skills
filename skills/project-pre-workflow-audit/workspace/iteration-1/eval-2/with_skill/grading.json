@@ -1,0 +1,20 @@
+{
+  "eval_id": 2,
+  "eval_name": "different-workflow-name",
+  "run_type": "with_skill",
+  "timestamp": "2026-03-16T10:40:00Z",
+  "expectations": [
+    {
+      "text": "directory_structure_created",
+      "passed": true,
+      "evidence": "存在 .dvv/inputs, .dvv/plans, .dvv/others, .dvv/reports, .dvv/archived 目录"
+    },
+    {
+      "text": "log_file_naming_correct",
+      "passed": true,
+      "evidence": "存在 .dvv/test_workflow_progress_log.md 文件，命名符合 {workflow}_progress_log.md 格式"
+    }
+  ],
+  "overall_passed": true,
+  "notes": "技能正确执行了目录创建和日志文件命名"
+}

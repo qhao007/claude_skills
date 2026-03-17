@@ -1,0 +1,18 @@
+{
+  "eval_id": 2,
+  "eval_name": "different-workflow-name",
+  "prompt": "现在开始运行 test_workflow 流程，请先准备日志文件和目录",
+  "expected_output": "创建完整目录结构和 test_workflow_progress_log.md 日志文件",
+  "assertions": [
+    {
+      "name": "directory_structure_created",
+      "description": "检查是否创建了完整的 .dvv 目录结构",
+      "check": "存在 .dvv/inputs, .dvv/plans, .dvv/others, .dvv/reports, .dvv/archived 目录"
+    },
+    {
+      "name": "log_file_naming_correct",
+      "description": "检查日志文件命名是否遵循新格式",
+      "check": "存在 .dvv/test_workflow_progress_log.md 文件"
+    }
+  ]
+}

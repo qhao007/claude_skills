@@ -1,0 +1,23 @@
+{
+  "eval_id": 1,
+  "eval_name": "basic-workflow-setup",
+  "prompt": "我要开始执行 pcie_debug_flow 工作流，请帮我准备执行环境",
+  "expected_output": "创建 .dvv 目录结构（inputs/plans/others/reports/archived），创建 pcie_debug_flow_progress_log.md 日志文件",
+  "assertions": [
+    {
+      "name": "directory_structure_created",
+      "description": "检查是否创建了完整的 .dvv 目录结构",
+      "check": "存在 .dvv/inputs, .dvv/plans, .dvv/others, .dvv/reports, .dvv/archived 目录"
+    },
+    {
+      "name": "log_file_created",
+      "description": "检查是否创建了正确命名的日志文件",
+      "check": "存在 .dvv/pcie_debug_flow_progress_log.md 文件"
+    },
+    {
+      "name": "log_file_content",
+      "description": "检查日志文件是否包含必要模板内容",
+      "check": "日志文件包含'工作流执行日志'、'执行目标'、'执行记录'等章节"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "eval_id": 1,
+  "eval_name": "basic-workflow-setup",
+  "run_type": "with_skill",
+  "timestamp": "2026-03-16T10:40:00Z",
+  "expectations": [
+    {
+      "text": "directory_structure_created",
+      "passed": false,
+      "evidence": ".dvv 目录结构未创建，文件被放在 outputs/ 目录下"
+    },
+    {
+      "text": "log_file_created",
+      "passed": false,
+      "evidence": "日志文件创建在 outputs/pcie_debug_flow_progress_log.md 而非 .dvv/pcie_debug_flow_progress_log.md"
+    },
+    {
+      "text": "log_file_content",
+      "passed": true,
+      "evidence": "日志文件包含正确的模板内容（执行目标、执行记录等章节）"
+    }
+  ],
+  "overall_passed": false,
+  "notes": "技能执行时未在正确位置创建 .dvv 目录结构"
+}
