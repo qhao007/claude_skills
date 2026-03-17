@@ -3,14 +3,16 @@
 # Lines starting with # or empty lines are ignored
 
 # Local PC Skills
-/d/claude_workspace/custom_skills
-/d/claude_workspace/chip_dev_workarea/.claude/skills
-/c/Users/haoq/.claude/skills/questasim-usage
-/c/Users/haoq/.claude/skills/project-memory-saver
-/c/Users/haoq/.claude/skills/verilog-dev
+d:\\claude_workspace\custom_skills
+d:\\claude_workspace\chip_dev_workarea\.claude\skills
+c:\\Users\haoq\.claude\skills\questasim-usage
+c:\\Users\haoq\.claude\skills\project-memory-saver
+c:\\Users\haoq\.claude\skills\project-lesson-loader
+c:\\Users\haoq\.claude\skills\verilog-dev
+c:\\Users\haoq\.claude\skills\dvv-*
 
 # This project (workflow skill)
-/d/claude_workspace/home_made_skill_management/sync-home-made-skill
+d:\\claude_workspace\home_made_skill_management\sync-home-made-skill
 
 # Server Skills (Tracker) - requires SSH access
 /projects/management/tracker/custom_skills/skill-creator

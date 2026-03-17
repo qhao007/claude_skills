@@ -1,0 +1,275 @@
+# DVV Issue Fix Flow - 工作流定义
+# 用于 project-post-workflow-audit 技能进行工作流审计
+
+name: dvv-issue-fix-flow
+version: "1.3"
+description: 代码问题调试修复工作流
+
+# 工作流标准阶段定义
+phases:
+  - id: phase_0
+    name: 工作区准备
+    executor: general-purpose
+    description: 调用 project-pre-workflow-audit 技能，创建工作流目录结构和执行日志，归档历史文档
+    inputs:
+      - type: workflow_name
+        description: 工作流名称（固定为 issue_fix_flow）
+    outputs:
+      - path: .dvv/inputs/
+        description: 输入目录
+        required: true
+      - path: .dvv/plans/
+        description: 计划目录
+        required: true
+      - path: .dvv/reports/
+        description: 报告目录
+        required: true
+      - path: .dvv/others/
+        description: 其他文档目录
+        required: true
+      - path: .dvv/archived/
+        description: 历史归档目录
+        required: true
+      - path: .dvv/issue_fix_flow_progress_log.md
+        description: 工作流执行日志
+        required: true
+    success_criteria:
+      - .dvv 目录结构已创建
+      - 执行日志已创建
+      - 历史文档已归档（如有）
+
+  - id: phase_1
+    name: 获取输入信息
+    executor: main_agent
+    description: 收集用户输入，创建问题描述文档
+    inputs:
+      - type: user_input
+        description: 问题/缺陷描述、日志、波形文件等
+    outputs:
+      - path: .dvv/inputs/issue_description_*.md
+        description: 问题描述文档
+        required: true
+    success_criteria:
+      - 问题描述文档已创建
+      - 关键问题点已提取
+
+  - id: phase_2
+    name: 问题分析
+    executor: dvv-issue-analysis-agent
+    description: 详细问题分析，识别根因，制定调试和修复计划
+    inputs:
+      - path: .dvv/inputs/issue_description_*.md
+        description: 问题描述文档
+    outputs:
+      - path: .dvv/reports/analysis_report_*.md
+        description: 分析报告
+        required: true
+      - path: .dvv/plans/debug_plan_*.md
+        description: 调试计划
+        required: true
+    success_criteria:
+      - 分析报告包含问题描述、根因分析
+      - 调试计划包含执行步骤、验证方案
+
+  - id: phase_3
+    name: 计划评审
+    executor: general-purpose
+    description: 评审调试计划，评估遗漏和逻辑问题
+    inputs:
+      - path: .dvv/reports/analysis_report_*.md
+      - path: .dvv/plans/debug_plan_*.md
+    outputs:
+      - path: .dvv/reports/plan_review_*.md
+        description: 评审报告
+        required: true
+    success_criteria:
+      - 评审报告包含遗漏检查、改进建议
+      - 给出决策（通过/需要修改）
+    decision_points:
+      - condition: 评审决策为"需要修改"
+        action: 返回 phase_4 优化计划
+      - condition: 评审决策为"通过"
+        action: 继续 phase_5
+
+  - id: phase_4
+    name: 计划优化
+    executor: dvv-issue-analysis-agent
+    description: 根据评审意见优化调试计划
+    inputs:
+      - path: .dvv/plans/debug_plan_*.md
+      - path: .dvv/reports/plan_review_*.md
+    outputs:
+      - path: .dvv/plans/debug_plan_*.md
+        description: 优化后的调试计划
+        required: true
+    success_criteria:
+      - 优化后的计划回应了评审意见
+    iteration:
+      max_rounds: 3
+      loop_path: phase_4 -> phase_3 -> phase_4
+      trigger: phase_3 评审决策为"需要修改"
+      counter_location: .dvv/issue_fix_flow_progress_log.md
+      description: Phase 3/4 计划评审-优化循环，最多3轮
+
+  - id: phase_5
+    name: 执行修复
+    executor: general-purpose
+    description: 根据调试计划执行具体的调试和修复
+    inputs:
+      - path: .dvv/plans/debug_plan_*.md
+      - path: .dvv/reports/analysis_report_*.md
+    outputs:
+      - path: .dvv/reports/fix_record_*.md
+        description: 修复记录
+        required: true
+      - type: code_changes
+        description: 修复后的代码
+    success_criteria:
+      - 修复记录包含执行状态追踪
+      - 代码变更已保存
+
+  - id: phase_6
+    name: 验证
+    executor: dvv-checking-agent
+    description: 验证修复，确认无新问题引入
+    inputs:
+      - path: .dvv/reports/fix_record_*.md
+      - path: .dvv/plans/debug_plan_*.md
+    outputs:
+      - path: .dvv/reports/verification_report_*.md
+        description: 验证报告
+        required: true
+    success_criteria:
+      - 验证报告包含计划执行完整性检查
+      - 验证报告包含功能验证和回归测试结果
+
+  - id: phase_7
+    name: 结果评审
+    executor: general-purpose
+    description: 评估验证结果，决策是否需要再次修复
+    inputs:
+      - path: .dvv/reports/verification_report_*.md
+      - path: .dvv/reports/fix_record_*.md
+      - path: .dvv/plans/debug_plan_*.md
+    outputs:
+      - path: .dvv/reports/result_review_*.md
+        description: 结果评审报告
+        required: true
+    success_criteria:
+      - 评审结论明确
+      - 覆盖度已验证
+    decision_points:
+      - condition: 高优先级遗漏未补充
+        action: 返回 phase_5 补充执行
+      - condition: 功能验证失败
+        action: 返回 phase_5 重新修复
+      - condition: 原问题未修复
+        action: 返回 phase_2 重新分析
+
+  - id: phase_8
+    name: 总结回顾
+    executor: main_agent
+    description: 生成最终报告，执行工作流审计
+    inputs:
+      - path: .dvv/reports/*.md
+      - path: .dvv/plans/*.md
+    outputs:
+      - path: .dvv/reports/issue_fix_summary_*.md
+        description: 最终总结报告
+        required: true
+    success_criteria:
+      - 最终报告已生成
+      - 工作流审计已完成
+
+# 迭代控制
+iteration_control:
+  # Phase 3/4 计划评审-优化循环
+  plan_review_iterations:
+    max_rounds: 3
+    iteration_path: phase_4 -> phase_3 -> phase_4
+    trigger: phase_3 评审决策为"需要修改"
+    counter_location: .dvv/issue_fix_flow_progress_log.md
+    description: 计划评审-优化循环，最多3轮
+
+  # Phase 5-7 修复-验证循环
+  fix_iterations:
+    max_rounds: 3
+    iteration_path: phase_5 -> phase_6 -> phase_7 -> phase_5
+    trigger: phase_7 决策为"需要再次修复"
+    counter_location: .dvv/issue_fix_flow_progress_log.md
+    description: 修复-验证循环，最多3次
+
+# 审计检查点
+audit_checks:
+  - id: workspace_preparation
+    name: 工作区准备检查
+    phase: phase_0
+    description: 检查工作区准备工作是否完成
+    check_items:
+      - .dvv 目录结构是否创建完整
+      - 执行日志是否创建
+      - 历史文档归档是否正确（如有）
+
+  - id: input_output_completeness
+    name: 输入输出完整性检查
+    phase: all
+    description: 检查每个阶段的输出文档是否完整覆盖输入要求
+    check_items:
+      - 检查输入文档的关键要点是否在输出文档中体现
+      - 检查是否有遗漏的关键信息
+
+  - id: plan_execution_completeness
+    name: 计划执行完整性检查
+    phase: phase_6
+    description: 检查调试计划的要求是否全部执行
+    check_items:
+      - 调试计划的每个步骤是否有执行记录
+      - 测试矩阵是否全部执行
+      - 遗漏项是否有风险评估
+
+  - id: coverage_verification
+    name: 覆盖度验证
+    phase: phase_7
+    description: 检查验证覆盖度
+    check_items:
+      - 调试计划要求 vs 验证报告执行的一致性
+      - 高优先级遗漏项是否已补充
+
+  - id: decision_traceability
+    name: 决策可追溯性
+    phase: phase_3, phase_7
+    description: 检查决策是否有充分依据
+    check_items:
+      - 评审决策是否基于明确标准
+      - 决策是否有证据支持
+
+# 质量标准
+quality_standards:
+  - id: document_quality
+    name: 文档质量
+    criteria:
+      - 文档结构清晰
+      - 关键信息有表格汇总
+      - 有明确的检查清单
+
+  - id: process_integrity
+    name: 流程完整性
+    criteria:
+      - 所有阶段都已执行
+      - 迭代次数不超过上限
+      - 无跳过的必要步骤
+
+  - id: knowledge_capture
+    name: 知识沉淀
+    criteria:
+      - 经验教训已记录
+      - 相关文档已更新
+
+# 文件路径约定
+file_conventions:
+  input_dir: .dvv/inputs/
+  report_dir: .dvv/reports/
+  plan_dir: .dvv/plans/
+  other_dir: .dvv/others/
+  progress_log: .dvv/issue_fix_flow_progress_log.md
+  archived_dir: .dvv/archived/

@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tasklist 2>/dev/null | grep -iE \"baidu|pan|cloud|7z|aria\")",
+      "Bash(tasklist 2>/dev/null | grep -iE \"bash|sh|script\")",
+      "Bash(wmic process:*)",
+      "Bash(schtasks /query /fo CSV 2>/dev/null | grep -i sync)",
+      "Bash(taskkill //F //IM bash.exe //FI \"WINDOWTITLE eq *sync*\" 2>/dev/null; echo \"Killed sync processes\")",
+      "Bash(tasklist 2>/dev/null | grep -iE \"bash.*sync\")",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh)",
+      "Bash(rm -rf \"D:/claude_workspace/home_made_skill_management/skills/d\" && cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && bash -x ./sync_skills.sh 2>&1 | head -50)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"\\(Baidu|d/|normalize|src_path\\)\" | head -30)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | tail -30)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"\\(sync_skill|skill_name=|target_subdir=.*d\\)\" | head -30)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"mkdir.*skills\" | head -20)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && ./sync_skills.sh && ls -la skills/d)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh && ls skills/)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"\\(sync_skill|remote\\)\" | head -40)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -A5 \"skill_name\" | head -30)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"\\(mkdir|cp\\).*d[/ ]\" | head -20)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && ./sync_skills.sh && ls -la skills/d 2>&1)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh && ls -la skills/ | grep d)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh && ./sync_skills.sh && ls -la skills/ | grep d)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && ./sync_skills.sh)",
+      "Bash(rm -rf \"D:/claude_workspace/home_made_skill_management/skills/d\" && cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh && ls skills/)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && ./sync_skills.sh && ls skills/ | grep \"^d$\")",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | grep -E \"\\(mkdir|cp\\).*d[/ \\\\\"]\" | head -20)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && bash -x ./sync_skills.sh 2>&1 | tail -20)",
+      "Bash(cd \"D:/claude_workspace/home_made_skill_management\" && rm -rf skills/d && ./sync_skills.sh ; ls -la skills/ | grep d)",
+      "Skill(claude-md-management:revise-claude-md)",
+      "Bash(tasklist 2>/dev/null | grep -iE \"bash|sh|sync\")",
+      "Bash(taskkill //F //PID 31996 //PID 30036 2>/dev/null; echo \"Done\")"
+    ]
+  }
+}

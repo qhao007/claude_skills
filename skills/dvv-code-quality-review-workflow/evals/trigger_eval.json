@@ -1,0 +1,23 @@
+[
+  {"query": "对我们的RTL代码做一个完整的质量审查，检查是否符合设计规范", "should_trigger": true},
+  {"query": "执行代码质量审查工作流，审查rtl/目录下的所有模块", "should_trigger": true},
+  {"query": "检查testbench代码是否符合验证最佳实践", "should_trigger": true},
+  {"query": "帮我看看这个模块的代码风格有没有问题", "should_trigger": true},
+  {"query": "审查pcie_controller.sv实现是否匹配设计规格", "should_trigger": true},
+  {"query": "对我们的UVM测试环境做一个全面的质量检查", "should_trigger": true},
+  {"query": "检查rtl目录下的代码有没有遵循coding standard", "should_trigger": true},
+  {"query": "做一下代码质量审查，生成一份完整的报告", "should_trigger": true},
+  {"query": "帮我检查FIFO实现是否符合spec定义", "should_trigger": true},
+  {"query": "执行一个系统性的代码审查工作流", "should_trigger": true},
+
+  {"query": "帮我修复这个bug", "should_trigger": false},
+  {"query": "写一个Verilog模块，实现UART接收功能", "should_trigger": false},
+  {"query": "运行仿真测试一下这个模块", "should_trigger": false},
+  {"query": "解释一下这段代码是什么意思", "should_trigger": false},
+  {"query": "帮我优化一下这个函数的性能", "should_trigger": false},
+  {"query": "添加一个新的测试用例", "should_trigger": false},
+  {"query": "编译这个设计，看看有没有错误", "should_trigger": false},
+  {"query": "给我讲讲PCIe协议的工作原理", "should_trigger": false},
+  {"query": "删除这个目录下所有临时文件", "should_trigger": false},
+  {"query": "更新一下项目的README文档", "should_trigger": false}
+]

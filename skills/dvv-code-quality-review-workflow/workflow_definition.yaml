@@ -1,0 +1,254 @@
+# DVV Code Quality Review Workflow - 工作流定义
+# 用于 project-post-workflow-audit 技能进行工作流审计
+
+name: dvv-code-quality-review-workflow
+version: "2.0"
+description: 代码质量审查工作流，用于对芯片设计/验证代码进行系统性质量审查
+
+# 工作流标准阶段定义
+phases:
+  - id: phase_0
+    name: 工作区准备
+    executor: general-purpose
+    description: 调用 project-pre-workflow-audit 技能，创建工作流目录结构和执行日志，归档历史文档
+    inputs:
+      - type: workflow_name
+        description: 工作流名称（固定为 code-quality-review）
+    outputs:
+      - path: .dvv/inputs/
+        description: 输入目录
+        required: true
+      - path: .dvv/reports/
+        description: 报告目录
+        required: true
+      - path: .dvv/code_quality_review_progress_log.md
+        description: 工作流执行日志
+        required: true
+    success_criteria:
+      - .dvv 目录结构已创建
+      - 执行日志已创建
+      - 历史文档已归档（如有）
+
+  - id: phase_1
+    name: 需求收集
+    executor: main_agent
+    description: 确认代码文件位置和Spec文档，创建需求文档，**必须获取用户确认**
+    inputs:
+      - path: .dvv/codemap/critical-code-file-list.json
+        description: 目标代码文件列表（来自codemap，不要自行扩展）
+      - type: user_input
+        description: 用户指定的审查目标
+    outputs:
+      - path: .dvv/inputs/review_requirements.md
+        description: 审查需求文档
+        required: true
+    success_criteria:
+      - 需求文档已创建
+      - 目标文件和Spec已确认
+      - **用户已确认需求**（必须）
+
+  - id: phase_2
+    name: Spec完整性检查
+    executor: general-purpose
+    description: 检查每个模块的Spec是否包含完整内容
+    inputs:
+      - path: .dvv/inputs/review_requirements.md
+        description: 审查需求文档
+    outputs:
+      - path: .dvv/reports/spec_completeness_report.md
+        description: Spec完整性报告
+        required: true
+    success_criteria:
+      - Spec完整性报告已生成
+      - 缺失或内容不完整的Spec已识别
+
+  - id: phase_3
+    name: Spec合规性审查
+    executor: dvv-code-review-agent (并行)
+    description: 检查代码实现是否符合Spec，每个模块一个subagent（重要：每个子代理只审查一个模块，不要在一个子代理中审查多个模块），最多8个并行
+    inputs:
+      - path: .dvv/inputs/review_requirements.md
+        description: 审查需求文档
+      - type: module_list
+        description: 目标模块列表（来自Phase 1用户确认）
+    outputs:
+      - path: .dvv/reports/spec_compliance_{module}.md
+        description: 每个模块的Spec合规性报告（每个模块独立报告）
+        required: true
+    success_criteria:
+      - 每个目标模块都有对应的合规性报告
+      - 报告包含端口一致性、功能一致性检查
+    parallel:
+      max_agents: 8
+      strategy: one_module_per_agent
+
+  - id: phase_4
+    name: 经验教训检查
+    executor: general-purpose (并行)
+    description: 加载历史经验教训，检查代码是否存在与历史教训相关的问题模式，防止重复犯错。每个模块一个subagent（重要：每个子代理只检查一个模块，不要在一个子代理中检查多个模块），最多8个并行
+    inputs:
+      - path: .dvv/inputs/review_requirements.md
+        description: 审查需求文档
+      - path: tasks/lessons.md
+        description: 经验教训索引
+      - path: tasks/lessons_meta/
+        description: 经验教训详情目录
+      - type: module_list
+        description: 目标模块列表（来自Phase 1用户确认）
+    outputs:
+      - path: .dvv/reports/lessons_learned_{module}.md
+        description: 每个模块的经验教训检查报告（每个模块独立报告）
+        required: true
+    success_criteria:
+      - 已加载相关的历史经验教训
+      - 已检查代码是否存在历史问题模式
+      - 已提供基于经验教训的建议
+    requires_skill:
+      - project-lesson-loader
+    parallel:
+      max_agents: 8
+      strategy: one_module_per_agent
+
+  - id: phase_5
+    name: 代码质量审查
+    executor: dvv-code-review-agent (并行)
+    description: 检查代码风格、RTL最佳实践、Testbench最佳实践，每个模块一个subagent（重要：每个子代理只审查一个模块，不要在一个子代理中审查多个模块），最多8个并行
+    inputs:
+      - path: .dvv/inputs/review_requirements.md
+        description: 审查需求文档
+      - path: references/rtl_bestpractice_checklist.md
+        description: RTL最佳实践检查清单
+      - path: references/tb_bestpractice_checklist.md
+        description: Testbench最佳实践检查清单
+    outputs:
+      - path: .dvv/reports/quality_review_{module}.md
+        description: 每个模块的质量审查报告（每个模块独立报告）
+        required: true
+    success_criteria:
+      - RTL代码检查了所有清单项
+      - Testbench代码检查了所有清单项
+    parallel:
+      max_agents: 8
+      strategy: one_module_per_agent
+
+  - id: phase_6
+    name: 完备性检查
+    executor: general-purpose
+    description: 检查Phase 3、Phase 4和Phase 5是否完整覆盖所有模块和检查项
+    inputs:
+      - path: .dvv/inputs/review_requirements.md
+      - path: .dvv/reports/spec_compliance_*.md
+      - path: .dvv/reports/quality_review_*.md
+    outputs:
+      - path: .dvv/reports/completeness_check.md
+        description: 完备性检查报告
+        required: true
+    success_criteria:
+      - 报告确认所有模块已检查
+      - 报告确认所有checklist项已覆盖
+    decision_points:
+      - condition: 有遗漏模块（Spec合规性）
+        action: 迭代返回 phase_3
+      - condition: 有遗漏模块（经验教训检查）
+        action: 迭代返回 phase_4
+      - condition: 有遗漏模块（代码质量）
+        action: 迭代返回 phase_5
+    iteration:
+      max_rounds: 3
+      loop_path: phase_6 -> phase_3 -> phase_6 或 phase_6 -> phase_4 -> phase_6 或 phase_6 -> phase_5 -> phase_6
+      trigger: phase_6 发现遗漏
+      counter_location: .dvv/code_quality_review_progress_log.md
+      description: Phase 3/4/5-6 完备性检查循环，最多3轮
+
+  - id: phase_7
+    name: 结果总结
+    executor: main_agent
+    description: 汇总所有报告，生成最终总结，执行工作流审计
+    inputs:
+      - path: .dvv/reports/*.md
+    outputs:
+      - path: .dvv/reports/final_summary.md
+        description: 最终总结报告
+        required: true
+    success_criteria:
+      - 最终报告已生成
+      - 工作流审计已执行
+
+# 迭代控制
+iteration_control:
+  completeness_check_iterations:
+    max_rounds: 3
+    iteration_path: phase_6 -> phase_3 -> phase_6 或 phase_6 -> phase_4 -> phase_6 或 phase_6 -> phase_5 -> phase_6
+    trigger: phase_6 发现遗漏
+    counter_location: .dvv/code_quality_review_progress_log.md
+    description: 完备性检查循环，最多3轮
+
+# 审计检查点
+audit_checks:
+  - id: workspace_preparation
+    name: 工作区准备检查
+    phase: phase_0
+    description: 检查工作区准备工作是否完成
+    check_items:
+      - .dvv 目录结构是否创建完整
+      - 执行日志是否创建
+
+  - id: input_output_completeness
+    name: 输入输出完整性检查
+    phase: phase_1, phase_2, phase_3, phase_4, phase_5
+    description: 检查每个阶段的输出文档是否完整覆盖输入要求
+    check_items:
+      - 检查输入文档的关键要点是否在输出文档中体现
+      - 检查是否有遗漏的关键信息
+
+  - id: module_coverage
+    name: 模块覆盖率检查
+    phase: phase_3, phase_4, phase_5, phase_6
+    description: 检查是否所有目标模块都已进行Spec合规性审查、经验教训检查和代码质量审查
+    check_items:
+      - Phase1识别的每个模块是否都有对应的spec_compliance报告
+
+  - id: checklist_coverage
+    name: Checklist覆盖率检查
+    phase: phase_4, phase_5, phase_6
+    description: 检查RTL和TB最佳实践checklist以及经验教训是否全部覆盖
+    check_items:
+      - RTL checklist每个检查项是否都有执行结果
+      - TB checklist每个检查项是否都有执行结果
+
+  - id: decision_traceability
+    name: 决策可追溯性
+    phase: phase_6
+    description: 检查迭代决策是否有充分依据
+    check_items:
+      - 完备性检查是否基于明确的覆盖率数据
+      - 迭代决策是否有证据支持
+
+# 质量标准
+quality_standards:
+  - id: document_quality
+    name: 文档质量
+    criteria:
+      - 文档结构清晰
+      - 问题按严重程度分类
+      - 有明确的修复建议
+
+  - id: process_integrity
+    name: 流程完整性
+    criteria:
+      - 所有7个阶段都已执行
+      - 迭代次数不超过上限（3轮）
+      - 无跳过的必要步骤
+
+  - id: review_thoroughness
+    name: 审查深度
+    criteria:
+      - Spec合规性和代码质量都覆盖
+      - RTL和Testbench都覆盖
+      - 问题有具体行号和代码引用
+
+# 文件路径约定
+file_conventions:
+  input_dir: .dvv/inputs/
+  report_dir: .dvv/reports/
+  progress_log: .dvv/code_quality_review_progress_log.md

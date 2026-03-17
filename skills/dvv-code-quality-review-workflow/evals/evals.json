@@ -1,0 +1,35 @@
+{
+  "skill_name": "dvv-code-quality-review-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "对我们的PCIe项目执行代码质量审查工作流，检查rtl/目录下的模块是否符合设计规范",
+      "expected_output": "工作流应该启动，收集目标文件，执行spec合规性检查和代码质量检查，最终生成完整报告",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我们需要审查testbench目录下的UVM测试代码，检查是否符合验证最佳实践",
+      "expected_output": "工作流应该识别testbench文件，执行TB最佳实践检查，输出质量报告",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "检查rtl/fifo_sync.sv实现是否匹配docs/specs/fifo_spec.md中定义的规格",
+      "expected_output": "工作流应该只检查指定的单个模块与spec的一致性",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "对整个projects/self_crosslink目录下的代码进行全面质量审查，包括RTL和testbench",
+      "expected_output": "工作流应该识别所有目标文件，分类执行RTL和TB检查，生成综合报告",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "我们的代码有没有遵循项目的coding standard？检查一下rtl/目录下的所有模块",
+      "expected_output": "工作流应该读取coding standard，检查代码风格，报告不符合项",
+      "files": []
+    }
+  ]
+}

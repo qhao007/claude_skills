@@ -19,24 +19,24 @@ Run the sync script to check for updates:
 ./sync_skills.sh
 ```
 
-## Known Issues
-
-### Strange "d" Directory Appears
-
-There is a persistent issue where an unwanted `d/` directory (containing `BaiduNetdiskDownload`) appears in the `skills/` directory after running the sync script, even though:
-
-1. The source paths in `home_made_skill_locations.txt` do not contain this path
-2. Various filtering logic has been added to skip such directories
-
-This appears to be a Git Bash/Windows filesystem interaction bug. The directory is automatically created during script execution and reappears even after deletion.
-
-**Workaround:**
-- The `d/` directory is excluded via `.gitignore`
-- Manually delete if needed: `rm -rf skills/d`
-- Or add a post-sync cleanup step in your workflow
-
 ## Adding New Skills
 
 1. Edit `home_made_skill_locations.txt`
-2. Add the path (Unix/Git Bash format, e.g., `/d/claude_workspace/...`)
-3. Run `./sync_skills.sh` to sync
+2. Add the path in Windows format: `c:\\path\\to\\skills`
+3. Use wildcards for multiple skills: `c:\\Users\\haoq\\.claude\\skills\\dvv-*`
+4. Run `./sync_skills.sh --dry-run` to preview, then `./sync_skills.sh` to sync
+
+## Safety Features
+
+- `--dry-run`: Preview what will be copied without copying
+- `--limit N`: Set max files per skill (default: 500)
+- `--max-size MB`: Set max size per skill in MB (default: 100)
+
+## Skill Management
+
+- Use `/sync-home-made-skill` skill for full sync workflow (sync + index + commit + push)
+- Skills index is maintained in `skills_index.md`
+
+## Git Conventions
+
+- Local branch is `master`, remote is `main` - use `git push origin HEAD:main`

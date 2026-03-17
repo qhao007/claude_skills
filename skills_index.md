@@ -4,6 +4,20 @@ Generated on: 2026-03-17
 
 ## Skills List
 
+### dvv-code-quality-review-workflow
+
+- **Description**: 代码质量审查工作流。用于对芯片设计/验证代码进行系统性质量审查，包括Spec合规性检查、代码风格检查、RTL设计最佳实践检查、Testbench最佳实践检查
+- **Version**: Unknown
+- **Last Updated**: 2026-03-17
+- **Files**: 6
+
+### dvv-spec-gen-workflow
+
+- **Description**: DVV 规格生成工作流
+- **Version**: Unknown
+- **Last Updated**: 2026-03-17
+- **Files**: 10
+
 ### analyze-warnings
 
 - **Description**: Analyze QuestaSim compile/simulation logs for warnings and errors

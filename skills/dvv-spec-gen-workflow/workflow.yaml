@@ -1,0 +1,244 @@
+# dvv-spec-gen-workflow 工作流定义
+# YAML格式的工作流定义，用于自动化执行
+
+workflow_name: dvv-spec-gen-workflow
+version: "1.0"
+description: 芯片设计/验证规格书生成工作流
+
+# 工作区设置
+workspace:
+  root: ".dvv"
+  subdirs:
+    - inputs
+    - plans
+    - reports
+    - others
+    - archived
+
+# 模板文件位置
+templates:
+  design_spec: "docs/templates/SPEC-Design_Module_Template.md"
+  testbench_spec: "docs/templates/SPEC-Testbench_Template.md"
+
+# Phase 定义
+phases:
+  # Phase 0: 工作区准备
+  - name: phase0_setup
+    description: 创建工作区，设置目录结构
+    agent_type: main
+    skill: project-pre-workflow-audit
+    outputs:
+      - .dvv/inputs/
+      - .dvv/plans/
+      - .dvv/reports/
+      - .dvv/others/
+      - .dvv/archived/
+
+  # Phase 1: 需求收集
+  - name: phase1_requirements
+    description: 主代理收集用户需求，明确SPEC类型
+    agent_type: main
+    interaction: user
+    outputs:
+      - .dvv/inputs/requirements.md
+
+  # Phase 2.1: 架构生成
+  - name: phase2.1_architecture_gen
+    description: 生成系统架构图和模块层级规划
+    agent_type: subagent
+    subagent_type: general-purpose
+    inputs:
+      - .dvv/inputs/requirements.md
+    outputs:
+      - .dvv/plans/architecture_plan.md
+
+  # Phase 2.2: 架构审查
+  - name: phase2.2_architecture_review
+    description: 审查架构是否满足需求
+    agent_type: subagent
+    subagent_type: general-purpose
+    role: reviewer
+    inputs:
+      - .dvv/plans/architecture_plan.md
+      - .dvv/inputs/requirements.md
+    outputs:
+      - .dvv/reports/architecture_review.md
+    decision: true
+
+  # Phase 3.1: 接口生成
+  - name: phase3.1_interface_gen
+    description: 生成模块接口定义或TB-DUT连接关系
+    agent_type: subagent
+    subagent_type: general-purpose
+    inputs:
+      - .dvv/inputs/requirements.md
+      - .dvv/plans/architecture_plan.md
+    outputs:
+      - .dvv/plans/interface_definitions.md
+
+  # Phase 3.2: 接口审查
+  - name: phase3.2_interface_review
+    description: 审查接口定义是否符合协议标准
+    agent_type: subagent
+    subagent_type: general-purpose
+    role: reviewer
+    inputs:
+      - .dvv/plans/interface_definitions.md
+    outputs:
+      - .dvv/reports/interface_review.md
+    decision: true
+
+  # Phase 4: 详细规格生成
+  - name: phase4_spec_gen
+    description: 基于前面输出生成详细SPEC
+    agent_type: subagent
+    subagent_type: general-purpose
+    inputs:
+      - .dvv/inputs/requirements.md
+      - .dvv/plans/architecture_plan.md
+      - .dvv/plans/interface_definitions.md
+    outputs:
+      - .dvv/plans/specification.md
+
+  # Phase 5: 完整性审查
+  - name: phase5_completeness_review
+    description: 审查SPEC是否与模板相比有缺失
+    agent_type: subagent
+    subagent_type: general-purpose
+    role: reviewer
+    inputs:
+      - .dvv/plans/specification.md
+    outputs:
+      - .dvv/reports/spec_completeness_review.md
+    decision: true
+
+  # Phase 6: 内容审查（迭代）
+  - name: phase6_content_review
+    description: 审查SPEC内容是否满足需求
+    agent_type: subagent
+    subagent_type: general-purpose
+    role: reviewer
+    inputs:
+      - .dvv/plans/specification.md
+      - .dvv/inputs/requirements.md
+    outputs:
+      - .dvv/reports/spec_content_review_N.md
+    decision: true
+    iterative: true
+    min_iterations: 1
+    max_iterations: 3
+
+  # Phase 7: 总结与归档
+  - name: phase7_summary
+    description: 主代理生成最终总结，执行归档
+    agent_type: main
+    skill: project-post-workflow-audit
+    inputs:
+      - .dvv/inputs/requirements.md
+      - .dvv/plans/
+      - .dvv/reports/
+    outputs:
+      - .dvv/reports/final_summary.md
+
+# 决策映射
+decisions:
+  # Phase 2.2: 架构审查决策
+  phase2.2_architecture_review:
+    PASS:
+      next: phase3.1_interface_gen
+    NEEDS_REVISION:
+      next: phase2.1_architecture_gen
+      loop: true
+
+  # Phase 3.2: 接口审查决策
+  phase3.2_interface_review:
+    PASS:
+      next: phase4_spec_gen
+    NEEDS_REVISION:
+      next: phase3.1_interface_gen
+      loop: true
+
+  # Phase 5: 完整性审查决策
+  phase5_completeness_review:
+    PASS:
+      next: phase6_content_review
+    NEEDS_REVISION:
+      next: phase4_spec_gen
+      loop: true
+
+  # Phase 6: 内容审查决策
+  phase6_content_review:
+    PASS:
+      next: phase7_summary
+    NEEDS_REVISION:
+      condition: iteration < max_iterations
+      next: phase4_spec_gen
+      loop: true
+      iteration_increment: true
+    FAIL:
+      condition: iteration >= max_iterations
+      next: terminate
+      error: true
+
+# 输出文件模板
+output_templates:
+  requirements: |
+    # 需求文档
+
+    ## 项目信息
+    - 项目名称: {project_name}
+    - 模块名称: {module_name}
+    - 规格类型: {spec_type}
+
+    ## 功能需求
+    {functional_requirements}
+
+    ## 接口需求
+    {interface_requirements}
+
+    ## 性能目标
+    {performance_goals}
+
+    ## 约束条件
+    {constraints}
+
+  architecture_plan: |
+    # 架构规划
+
+    ## 1. 系统架构图
+    {architecture_diagram}
+
+    ## 2. 模块层级结构
+    {module_hierarchy}
+
+    ## 3. 子模块划分
+    {submodule_division}
+
+  interface_definitions: |
+    # 接口定义
+
+    ## 端口定义
+    {port_definitions}
+
+    ## 信号列表
+    {signal_list}
+
+  specification: |
+    # 详细规格书
+
+    {spec_content}
+
+  final_summary: |
+    # 工作流执行总结
+
+    ## 执行概述
+    {execution_summary}
+
+    ## 各Phase结果
+    {phase_results}
+
+    ## 生成文档
+    {generated_documents}
+
+    ## 经验教训
+    {lessons_learned}
